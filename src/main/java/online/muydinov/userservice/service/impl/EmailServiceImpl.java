@@ -54,7 +54,6 @@ public class EmailServiceImpl implements EmailService {
             helper.setFrom(fromEmail);
             helper.setTo(to);
             helper.setText(EmailUtils.getEmailMessage(name, host, token));
-//            Add attachment
             FileSystemResource fat = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/fat.png"));
             FileSystemResource resume = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/Resume.pdf"));
             helper.addAttachment(resume.getFilename(), resume);
@@ -75,7 +74,23 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendMimeMessageWithEmbeddedImages(String name, String to, String token) {
-
+        try {
+            MimeMessage message = getMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
+            helper.setPriority(1);
+            helper.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
+            helper.setFrom(fromEmail);
+            helper.setTo(to);
+            helper.setText(EmailUtils.getEmailMessage(name, host, token));
+            FileSystemResource fat = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/fat.png"));
+            FileSystemResource resume = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/Resume.pdf"));
+            helper.addInline(getContentId(resume.getFilename()), resume);
+            helper.addInline(getContentId(fat.getFilename()), fat);
+            emailSender.send(message);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
+        }
     }
 
     @Async
@@ -92,5 +107,9 @@ public class EmailServiceImpl implements EmailService {
 
     private MimeMessage getMimeMessage() {
         return emailSender.createMimeMessage();
+    }
+
+    private String getContentId(String fileName) {
+        return "<" + fileName + "/>";
     }
 }
