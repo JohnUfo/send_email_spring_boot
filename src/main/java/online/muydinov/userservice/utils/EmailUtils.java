@@ -6,7 +6,7 @@ public class EmailUtils {
                 "\n\n" + getVerificationUrL(host, token) + "\n\nThe support team";
     }
 
-    private static String getVerificationUrL(String host, String token) {
+    public static String getVerificationUrL(String host, String token) {
         return host + "/api/users?token=" + token;
     }
 
