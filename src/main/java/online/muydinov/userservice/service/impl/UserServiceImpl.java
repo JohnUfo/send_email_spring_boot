@@ -5,6 +5,7 @@ import online.muydinov.userservice.domain.Confirmation;
 import online.muydinov.userservice.domain.User;
 import online.muydinov.userservice.repository.ConfirmationRepository;
 import online.muydinov.userservice.repository.UserRepository;
+import online.muydinov.userservice.service.EmailService;
 import online.muydinov.userservice.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ConfirmationRepository confirmationRepository;
+    private final EmailService emailService;
 
     @Override
     public User saveUser(User user) {
@@ -26,8 +28,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         Confirmation confirmation = new Confirmation(user);
         confirmationRepository.save(confirmation);
-
-        //TODO Send email to user with token
+        emailService.sendSimpleMailMessage(user.getName(), user.getEmail(), confirmation.getToken());
         return user;
     }
 
