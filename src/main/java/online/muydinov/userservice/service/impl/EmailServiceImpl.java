@@ -67,13 +67,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendMimeMessageWithEmbedded(String name, String to, String token) {
-
-    }
-
-    @Async
-    @Override
-    public void sendMimeMessageWithEmbeddedImages(String name, String to, String token) {
+    public void sendMimeMessageWithEmbeddedFiles(String name, String to, String token) {
         try {
             MimeMessage message = getMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
@@ -95,13 +89,13 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendHtmlEmail(String name, String to, String token) {
+    public void sendMimeMessageWithEmbedded(String name, String to, String token) {
 
     }
 
     @Async
     @Override
-    public void sendHtmlEmailWithEmbeddedFiles(String name, String to, String token) {
+    public void sendHtmlEmail(String name, String to, String token) {
 
     }
 
