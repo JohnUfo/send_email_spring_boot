@@ -94,8 +94,37 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendMimeMessageWithEmbedded(String name, String to, String token) {
+    public void sendHtmlMessageWithAttachment(String name, String to, String token) {
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8_ENCODING);
+            helper.setPriority(1);
+            helper.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
+            helper.setFrom(fromEmail);
+            helper.setTo(to);
 
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("verificationLink", getVerificationUrL(host, token));
+
+            FileSystemResource fatImage = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/fat.png"));
+            FileSystemResource resumeFile = new FileSystemResource(new File(System.getProperty("user.home") + "/Downloads/Resume.pdf"));
+
+            String fatImageCid = "fatImage";
+            String resumeFileUrl = host + "/downloads/Resume.pdf";
+
+            context.setVariable("fatImageCid", fatImageCid);
+            context.setVariable("resumeFileUrl", resumeFileUrl);
+
+            String htmlContent = templateEngine.process("email-template2", context);
+            helper.setText(htmlContent, true);
+            helper.addInline(fatImageCid, fatImage);
+            helper.addAttachment(resumeFile.getFilename(), resumeFile);
+            emailSender.send(message);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            throw new RuntimeException(exception.getMessage());
+        }
     }
 
     @Async
@@ -110,7 +139,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(to);
             Context context = new Context();
             context.setVariable("name", name);
-            context.setVariable("verificationLink", getVerificationUrL(host,token));
+            context.setVariable("verificationLink", getVerificationUrL(host, token));
             String htmlContent = templateEngine.process("email-template", context);
             helper.setText(htmlContent, true);
             emailSender.send(message);

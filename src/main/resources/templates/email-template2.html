@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User Account Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f4f4f9;
+            font-size: 12px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Welcome, <span th:text="${name}">User</span>!</h1>
+        <p>Please verify your email address to activate your account.</p>
+    </div>
+    <div class="content">
+        <p>Thank you for registering with us. To complete your registration, please click the button below:</p>
+        <a th:href="${verificationLink}" class="button">Verify Email</a>
+
+        <!-- Embedded Image -->
+        <p>Here is an embedded image for you:</p>
+        <img th:src="'cid:' + ${fatImageCid}" alt="Embedded Image" style="max-width: 100%; height: auto;">
+
+        <!-- PDF File Link -->
+        <p>You can download the attached PDF file from here: <a th:href="${resumeFileUrl}" th:text="${resumeFileUrl}">PDF File</a></p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2023 Your Company. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
