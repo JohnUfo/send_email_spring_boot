@@ -2,6 +2,7 @@ package online.muydinov.userservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import online.muydinov.userservice.service.EmailService;
+import online.muydinov.userservice.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,7 +27,7 @@ public class EmailServiceImpl implements EmailService {
             message.setSubject(NEW_USER_ACCOUNT_VERIFICATION);
             message.setFrom(fromEmail);
             message.setTo(to);
-            message.setText("Hey this is working ha ha ha");
+            message.setText(EmailUtils.getEmailMessage(name, host, token));
             emailSender.send(message);
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
